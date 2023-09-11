@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:lagola_flutter/configs/colors.dart';
-import 'package:lagola_flutter/configs/screen.dart';
-import 'package:lagola_flutter/widgets/drawer.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+import '../configs/colors.dart';
+import '../configs/screen.dart';
+import '../widgets/drawer.dart';
+
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Accueil"),
+        title: Text("Historiques"),
         foregroundColor: Colors.white,
         backgroundColor: primaryColor,
         elevation: 1,
@@ -23,16 +24,16 @@ class _HomeScreenState extends State<HomeScreen> {
         iconTheme: IconThemeData(color: Colors.white, size: hauteur(context, 20)),
         actions: [
           IconButton(
-              onPressed: (){}, 
+              onPressed: (){},
               icon: const Icon(Icons.search)
           ),
           IconButton(
-              onPressed: (){}, 
+              onPressed: (){},
               icon: const Icon(Icons.more_vert)
           )
         ],
       ),
-      drawer: const AppDrawer(user_name: "Marinette de Lady Bug", user_token: "token", selected: 1, user_id: "12"),
+      drawer: const AppDrawer(user_id: "12", selected: 3, user_token: "token", user_name: "Marinette de lady bug"),
     );
   }
 }

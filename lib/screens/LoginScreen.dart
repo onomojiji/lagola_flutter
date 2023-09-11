@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/configs/colors.dart';
+import 'package:lagola_flutter/screens/HomeScreen.dart';
 import 'package:lagola_flutter/widgets/Inputs/number_input.dart';
 
 import '../configs/screen.dart';
@@ -17,6 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final numberController = TextEditingController();
   final passwordController = TextEditingController();
+
+  String? message;
+
+  login(Map creds) async {
+    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => HomeScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    bottom: hauteur(context, 15),
+                    bottom: hauteur(context, 5),
                     left: largeur(context, 15),
                     right: largeur(context, 15)),
                 child: Text(
@@ -50,6 +58,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(fontSize: hauteur(context, 20), color: primaryColor, fontWeight: FontWeight.bold),
                 ),
               ),
+              (message != null)
+                  ? SizedBox(
+                height: hauteur(context, 10),
+              ) : const SizedBox(),
+              message != null
+                  ? Text(
+                message!,
+                style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal),
+              ) : const SizedBox(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: largeur(context, 15)),
           child: Column(
@@ -88,24 +108,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   if (numberController.value.text == '' && passwordController.value.text == ''){
                     setState(() {
-                      var message = "Aucun champs renseigné";
+                      message = "Aucun champs renseigné";
                     });
                   }else if(numberController.value.text == '' && passwordController.value.text != ''){
                     setState(() {
-                      var message = "Code eBULL-CTD non renseigné";
+                      message = "Numéro de téléphone non renseigné";
                     });
                   }else if(numberController.value.text != '' && passwordController.value.text == ''){
                     setState(() {
-                      var message = "Mot de passe non renseigné";
+                      message = "Mot de passe non renseigné";
                     });
                   }
                   else{
 
                     Map creds = {
-                      'codeEbull' : numberController.value.text,
+                      'phone' : numberController.value.text,
                       'password' : passwordController.value.text,
                       'device_name' : 'mobile',
                     };
+
+                    login(creds);
                   }
                 },
                 style: primaryButtonStyle(),
