@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
             ),
             Flexible(
-                flex: 10,
+                flex: 8,
                 child: GridView.count(
                   primary: false,
                   padding: EdgeInsets.symmetric(vertical: largeur(context, 10)),
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
                   children: const <Widget>[
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
+                    HomeProductItem(product_name: "Burger à la mante réligieuse acompagné de la vanille", inBox: "231", outBox: "11",),
                     HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
                     HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
                     HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),

@@ -7,6 +7,7 @@ import 'package:lagola_flutter/widgets/Inputs/number_input.dart';
 import '../configs/screen.dart';
 import '../styles/primary_button_style.dart';
 import '../widgets/Inputs/text_input.dart';
+import '../widgets/LoadingIndicatorDialog.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,7 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
   String? message;
 
   login(Map creds) async {
-    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => HomeScreen()));
+    LoadingIndicatorDialog().show(context);
+    Future.delayed(const Duration(seconds: 5), (){
+      LoadingIndicatorDialog().dismiss();
+      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => HomeScreen()));
+    });
+
   }
 
   @override
