@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lagola_flutter/widgets/Items/history_item.dart';
 
 import '../configs/colors.dart';
 import '../configs/screen.dart';
@@ -34,6 +35,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ],
       ),
       drawer: const AppDrawer(user_id: "12", selected: 3, user_token: "token", user_name: "Marinette de lady bug"),
+      
+      body: Column(
+        children: [
+          Flexible(
+            flex: 1,
+            child: Center(
+              child: Text(
+                "Aujourd'hui 28/08/2023",
+                style: TextStyle(
+                  color: textBoldColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: hauteur(context, 15),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 9,
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: const [
+                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 23, type: 1),
+                HistoryItem(product_name: "Chignong blanc de Bakassi", imgUrl: "assets/images/burger.png", qte: 543, type: 0),
+                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 93, type: 0),
+                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 13, type: 1),
+                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 34, type: 1)
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

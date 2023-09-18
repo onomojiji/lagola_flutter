@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/configs/colors.dart';
 import 'package:lagola_flutter/configs/screen.dart';
+import 'package:lagola_flutter/screens/AddSellScreen.dart';
 import 'package:lagola_flutter/widgets/drawer.dart';
-import 'package:lagola_flutter/widgets/home_product_item.dart';
+
+import '../widgets/Items/home_product_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,15 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: const AppDrawer(user_name: "Marinette de Lady Bug", user_token: "token", selected: 1, user_id: "12"),
-    
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child: Icon(Icons.add),
-        backgroundColor: primaryColor,
-        elevation: 2,
-        isExtended: true,
-        tooltip: "Ajouter une nouvelle vente",
-      ),
       
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: largeur(context, 10), vertical: hauteur(context, 10)),

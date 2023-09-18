@@ -125,7 +125,7 @@ class _AppDrawerState extends State<AppDrawer> {
                         ),
                         widget.selected == 2? ListTile(
                           leading: const Icon(Icons.inventory_rounded),
-                          title: const Text("Ravitaillements"),
+                          title: const Text("Inventaires"),
                           selected: true,
                           selectedTileColor: Colors.orange,
                           selectedColor: Colors.white,
@@ -137,7 +137,7 @@ class _AppDrawerState extends State<AppDrawer> {
                           },
                         ) : ListTile(
                           leading: const Icon(Icons.inventory_rounded),
-                          title: const Text("Ravitaillements"),
+                          title: const Text("Inventaires"),
                           textColor: Colors.white,
                           iconColor: Colors.white,
                           onTap: (){
