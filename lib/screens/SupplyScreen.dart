@@ -6,7 +6,10 @@ import '../configs/colors.dart';
 import '../configs/screen.dart';
 
 class SupplyScreen extends StatefulWidget {
-  const SupplyScreen({super.key});
+
+  final String user_name, user_id, user_token;
+
+  const SupplyScreen({super.key, required this.user_name, required this.user_id, required this.user_token});
 
   @override
   State<SupplyScreen> createState() => _SupplyScreenState();
@@ -34,7 +37,12 @@ class _SupplyScreenState extends State<SupplyScreen> {
           )
         ],
       ),
-      drawer: const AppDrawer(user_id: "12", selected: 2, user_token: "token", user_name: "Marinette de lady bug"),
+      drawer: AppDrawer(
+        selected: 2,
+        user_id: widget.user_id,
+        user_name: widget.user_name,
+        user_token: widget.user_token,
+      ),
     
       body: Padding(
           padding: EdgeInsets.symmetric(vertical: hauteur(context, 10)),

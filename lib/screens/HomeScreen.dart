@@ -1,14 +1,19 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/configs/colors.dart';
 import 'package:lagola_flutter/configs/screen.dart';
-import 'package:lagola_flutter/screens/AddSellScreen.dart';
 import 'package:lagola_flutter/widgets/drawer.dart';
 
+import '../services/dio.dart';
 import '../widgets/Items/home_product_item.dart';
+import '../widgets/LoadingIndicatorDialog.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+
+  final String user_name, user_id, user_token;
+
+  const HomeScreen({super.key, required this.user_name, required this.user_id, required this.user_token});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,11 +21,56 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  List <String> products = [
-   'burger',
-    '231',
-    '11'
-  ];
+  late String today = "";
+  late String allProducts = "";
+  late String allSumProductPrice = "";
+  final productList = <Widget>[];
+
+  getHome() async {
+
+    // open loading dialog
+    LoadingIndicatorDialog().show(context);
+
+    try{
+      var responseUser = await dio().get(
+        '/home',
+        options: Options(
+          headers: {'Authorization' : 'Bearer ${widget.user_token}',},
+          responseType: ResponseType.json,
+          validateStatus: (statusCode) {
+            if(statusCode == null){
+              return false;
+            }if(statusCode == 404){
+              return true;
+            }else{
+              return statusCode >= 200 && statusCode < 300;
+            }
+          },
+        ),
+      );
+
+      var response = responseUser.data["data"];
+
+      print(response);
+
+      setState(() {
+        today = response["today"];
+        allProducts = response["allProducts"];
+        allSumProductPrice = response["allSumProductPrice"];
+      });
+
+      // close loading dialog
+      LoadingIndicatorDialog().dismiss();
+
+    }catch (e){
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {getHome();});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      drawer: const AppDrawer(user_name: "Marinette de Lady Bug", user_token: "token", selected: 1, user_id: "12"),
+      drawer: AppDrawer(
+          user_id: widget.user_id,
+          user_name: widget.user_name,
+          user_token: widget.user_token,
+          selected: 1,),
       
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: largeur(context, 10), vertical: hauteur(context, 10)),
@@ -60,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                         child: Center(
                           child: Text(
-                              "Aujourd'hui 28/08/2023",
+                              "Aujourd'hui $today",
                             style: TextStyle(
                               color: textBoldColor,
                               fontWeight: FontWeight.bold,
@@ -101,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   size: hauteur(context, 25),
                                 ),
                                 Text(
-                                    "1 978 898",
+                                    "$allProducts",
                                   style: TextStyle(
                                     color: primaryColor,
                                     fontSize: hauteur(context, 20)
@@ -136,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     size: hauteur(context, 25),
                                   ),
                                   Text(
-                                    "1 907 830 Fcfa",
+                                    "$allSumProductPrice",
                                     style: TextStyle(
                                         color: primaryColor,
                                         fontSize: hauteur(context, 18)
@@ -160,15 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
                   children: const <Widget>[
-                    HomeProductItem(product_name: "Burger à la mante réligieuse acompagné de la vanille", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
                     HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
                   ],
                 )

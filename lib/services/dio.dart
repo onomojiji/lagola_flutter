@@ -7,8 +7,8 @@ Dio dio () {
   // dio.options.baseUrl = "http://localhost:8000/api";
   // linux
   // dio.options.baseUrl = 'http://localhost:8000/api';
-  // andoid
-  dio.options.baseUrl = 'http://10.0.2.2:8000/api';
+  // android
+  dio.options.baseUrl = 'http://10.0.2.2:8000/api/sellers';
 
 
   //dio.options.connectTimeout = 5000; //5s

@@ -6,7 +6,10 @@ import '../configs/screen.dart';
 import '../widgets/drawer.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key});
+
+  final String user_name, user_id, user_token;
+
+  const HistoryScreen({super.key, required this.user_name, required this.user_id, required this.user_token});
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -34,7 +37,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
           )
         ],
       ),
-      drawer: const AppDrawer(user_id: "12", selected: 3, user_token: "token", user_name: "Marinette de lady bug"),
+      drawer: AppDrawer(
+        selected: 3,
+        user_id: widget.user_id,
+        user_name: widget.user_name,
+        user_token: widget.user_token,
+      ),
       
       body: Column(
         children: [

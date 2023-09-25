@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:lagola_flutter/configs/colors.dart';
 import 'package:lagola_flutter/screens/HistoryScreen.dart';
 import 'package:lagola_flutter/screens/SupplyScreen.dart';
-import 'package:lagola_flutter/screens/SupplyScreen.dart';
+import 'package:lagola_flutter/widgets/LoadingIndicatorDialog.dart';
 
 import '../configs/screen.dart';
 import '../screens/HomeScreen.dart';
 import '../screens/LoginScreen.dart';
 import '../services/dio.dart';
-import 'loading.dart';
 
 class AppDrawer extends StatefulWidget {
 
@@ -25,8 +24,30 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
 
-  logout() {
+  Future<void> logout() async {
+     LoadingIndicatorDialog().show(context);
+    try{
+      var response = await dio().get(
+        '/logout',
+        options: Options(
+          headers: {'Authorization' : 'Bearer ' + widget.user_token,},
+          validateStatus: (statusCode) {
+            if(statusCode == null){
+              return false;
+            }if(statusCode == 404){
+              return true;
+            }else{
+              return statusCode >= 200 && statusCode < 300;
+            }
+          },
+        ),
+      );
+      LoadingIndicatorDialog().dismiss();
       Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => LoginScreen()));
+
+    }catch (e){
+      print(e);
+    }
   }
 
   @override
@@ -109,7 +130,11 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => HomeScreen())));
+                                    builder: ((context) => HomeScreen(
+                                      user_id: widget.user_id,
+                                      user_name: widget.user_name,
+                                      user_token: widget.user_token,
+                                    ))));
                           },
                         ) : ListTile(
                           leading: const Icon(Icons.home),
@@ -120,7 +145,11 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => HomeScreen())));
+                                    builder: ((context) => HomeScreen(
+                                      user_id: widget.user_id,
+                                      user_name: widget.user_name,
+                                      user_token: widget.user_token,
+                                    ))));
                           },
                         ),
                         widget.selected == 2? ListTile(
@@ -133,7 +162,11 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => SupplyScreen())));
+                                    builder: ((context) => SupplyScreen(
+                                      user_id: widget.user_id,
+                                      user_name: widget.user_name,
+                                      user_token: widget.user_token,
+                                    ))));
                           },
                         ) : ListTile(
                           leading: const Icon(Icons.inventory_rounded),
@@ -144,7 +177,11 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => SupplyScreen())));
+                                    builder: ((context) => SupplyScreen(
+                                      user_id: widget.user_id,
+                                      user_name: widget.user_name,
+                                      user_token: widget.user_token,
+                                    ))));
                           },
                         ),
                         widget.selected == 3 ? ListTile(
@@ -157,7 +194,11 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => HistoryScreen())));
+                                    builder: ((context) => HistoryScreen(
+                                      user_id: widget.user_id,
+                                      user_name: widget.user_name,
+                                      user_token: widget.user_token,
+                                    ))));
                           },
                         ) : ListTile(
                           leading: const Icon(Icons.history),
@@ -168,7 +209,11 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) => HistoryScreen())));
+                                    builder: ((context) => HistoryScreen(
+                                      user_id: widget.user_id,
+                                      user_name: widget.user_name,
+                                      user_token: widget.user_token,
+                                    ))));
                           },
                         ),
                       ],
