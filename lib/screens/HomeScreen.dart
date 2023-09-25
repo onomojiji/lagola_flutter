@@ -2,25 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/configs/colors.dart';
 import 'package:lagola_flutter/configs/screen.dart';
-import 'package:lagola_flutter/screens/AddSellScreen.dart';
 import 'package:lagola_flutter/widgets/drawer.dart';
 
 import '../widgets/Items/home_product_item.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+
+  final String user_name, user_id, user_token;
+
+  const HomeScreen({super.key, required this.user_name, required this.user_id, required this.user_token});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  List <String> products = [
-   'burger',
-    '231',
-    '11'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      drawer: const AppDrawer(user_name: "Marinette de Lady Bug", user_token: "token", selected: 1, user_id: "12"),
+      drawer: AppDrawer(
+          user_id: widget.user_id,
+          user_name: widget.user_name,
+          user_token: widget.user_token,
+          selected: 1,),
       
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: largeur(context, 10), vertical: hauteur(context, 10)),

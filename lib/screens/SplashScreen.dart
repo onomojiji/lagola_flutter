@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lagola_flutter/screens/HomeScreen.dart';
 import 'package:lagola_flutter/screens/LoginScreen.dart';
 
-import '../configs/colors.dart';
 import '../configs/screen.dart';
+import 'noInternetScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,19 +16,52 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  bool isinternetavailable = false;
+
   @override
   void initState() {
     // ignore: todo
     // TODO: implement initState
+
+    isinternetconnected().then((value){
+      setState(() {
+        isinternetavailable = value;
+      });
+    });
+
     super.initState();
     Future.delayed(
       const Duration(seconds: 3),
-          () => Navigator.pushReplacement(
+
+          () {
+        isinternetavailable ?
+        Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
             builder: (context) => const LoginScreen(),
-          )),
+          )):
+        Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => const NoInternetScreen(),
+            ));
+      }
     );
+  }
+
+  Future<bool> isinternetconnected() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        return true;
+      } else {
+        return false;
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      return false;
+    }
   }
 
   @override
