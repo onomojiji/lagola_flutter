@@ -20,7 +20,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Historiques"),
+        title: const Text("Historiques"),
         foregroundColor: Colors.white,
         backgroundColor: primaryColor,
         elevation: 1,

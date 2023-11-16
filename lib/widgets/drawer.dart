@@ -30,7 +30,7 @@ class _AppDrawerState extends State<AppDrawer> {
       var response = await dio().get(
         '/logout',
         options: Options(
-          headers: {'Authorization' : 'Bearer ' + widget.user_token,},
+          headers: {'Authorization' : 'Bearer ${widget.user_token}',},
           validateStatus: (statusCode) {
             if(statusCode == null){
               return false;
@@ -43,7 +43,7 @@ class _AppDrawerState extends State<AppDrawer> {
         ),
       );
       LoadingIndicatorDialog().dismiss();
-      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => LoginScreen()));
+      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => const LoginScreen()));
 
     }catch (e){
       print(e);
@@ -97,8 +97,7 @@ class _AppDrawerState extends State<AppDrawer> {
                           logout();
                         },
                         style: ElevatedButton.styleFrom(
-                          elevation: 2,
-                          primary: Colors.red,
+                          elevation: 2, backgroundColor: Colors.red,
                           minimumSize: const Size.fromHeight(45),
                         ),
                         child: const Text("Se déconnecter"),
@@ -152,7 +151,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                     ))));
                           },
                         ),
-                        widget.selected == 2? ListTile(
+                        /*widget.selected == 2? ListTile(
                           leading: const Icon(Icons.inventory_rounded),
                           title: const Text("Inventaires"),
                           selected: true,
@@ -183,7 +182,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                       user_token: widget.user_token,
                                     ))));
                           },
-                        ),
+                        ),*/
                         widget.selected == 3 ? ListTile(
                           leading: const Icon(Icons.history),
                           title: const Text("Historiques"),

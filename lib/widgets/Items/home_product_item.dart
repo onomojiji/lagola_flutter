@@ -1,22 +1,74 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/widgets/Inputs/number_input.dart';
 import 'package:lagola_flutter/widgets/LoadingIndicatorDialog.dart';
+import 'package:lagola_flutter/widgets/snackbars/danger_snack_notification.dart';
 import 'package:lagola_flutter/widgets/snackbars/primary_snack_notification.dart';
 
 import '../../configs/colors.dart';
 import '../../configs/screen.dart';
+import '../../services/dio.dart';
 import '../../styles/primary_button_style.dart';
 
 class HomeProductItem extends StatelessWidget {
 
-  final String product_name, inBox, outBox;
+  final int id;
+  final String product_name, inBox, outBox, user_token;
 
-  const HomeProductItem({super.key, required this.product_name, required this.inBox, required this.outBox});
+  const HomeProductItem({super.key, required this.product_name, required this.inBox, required this.outBox, required this.id, required this.user_token});
 
   @override
   Widget build(BuildContext context) {
 
     final quantityController = TextEditingController();
+
+    sellProduct(Map creds) async {
+
+      // open loading dialog
+      LoadingIndicatorDialog().show(context);
+
+      try{
+        var response = await dio().post(
+            '/sellProduct',
+            data: json.encode(creds),
+            options: Options(
+                headers: {'Authorization' : 'Bearer ${user_token}',},
+                responseType: ResponseType.json,
+                validateStatus: (statusCode) {
+                  if(statusCode == null){
+                    return false;
+                  }if(statusCode == 404){
+                    return true;
+                  }else{
+                    return statusCode >= 200 && statusCode < 300;
+                  }
+                }
+            )
+        );
+
+        var data = response.data;
+
+        Navigator.pop(context);
+
+        LoadingIndicatorDialog().dismiss();
+
+        if(data['status'] == 'success'){
+
+          primarySnackNotification(context, data['message']);
+
+        }else{ // informations de connexion non correctes
+
+          dangerSnackNotification(context, data['message']);
+
+        }
+
+      }catch (e){
+        print(e);
+      }
+
+    }
 
     return InkWell(
       child: Card(
@@ -157,12 +209,12 @@ class HomeProductItem extends StatelessWidget {
                         SizedBox(height: hauteur(context, 10),),
                         ElevatedButton(
                           onPressed: () {
-                            LoadingIndicatorDialog().show(context);
-                            Future.delayed(const Duration(seconds: 5), (){
-                              Navigator.pop(context);
-                              LoadingIndicatorDialog().dismiss();
-                              primarySnackNotification(context, "Vente enregistrée avec succès..");
-                            });
+                            Map creds = {
+                              'product_id' : id,
+                              'quantity' : quantityController.value.text,
+                            };
+
+                            sellProduct(creds);
                           },
                           style: primaryButtonStyle(),
                           child: const Text("Valider"),

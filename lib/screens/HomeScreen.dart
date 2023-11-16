@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/configs/colors.dart';
 import 'package:lagola_flutter/configs/screen.dart';
+import 'package:lagola_flutter/screens/NewSellScreen.dart';
 import 'package:lagola_flutter/widgets/drawer.dart';
 
 import '../services/dio.dart';
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String today = "";
   late String allProducts = "";
   late String allSumProductPrice = "";
-  final productList = <Widget>[];
+  late List<Widget> productList = <Widget>[];
 
   getHome() async {
 
@@ -51,12 +52,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
       var response = responseUser.data["data"];
 
-      print(response);
-
       setState(() {
         today = response["today"];
         allProducts = response["allProducts"];
         allSumProductPrice = response["allSumProductPrice"];
+
+        var allProductsToday = response["allProductsToday"];
+
+        for (var i = 0; i< allProductsToday.length; i++){
+          productList.add(
+            HomeProductItem(
+              user_token: widget.user_token,
+              id: allProductsToday[i]["id"],
+              product_name: allProductsToday[i]["name"],
+              inBox: '${allProductsToday[i]["inStock"]}',
+              outBox: '${allProductsToday[i]["outStock"]}',
+            ),
+          );
+        }
+
       });
 
       // close loading dialog
@@ -76,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Accueil"),
+        title: const Text("Accueil"),
         foregroundColor: Colors.white,
         backgroundColor: primaryColor,
         elevation: 1,
@@ -92,6 +106,14 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.more_vert)
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => NewSellScreen(user_token: widget.user_token,), fullscreenDialog: true));
+          },
+        child: Icon(Icons.add),
+        backgroundColor: primaryColor,
       ),
       drawer: AppDrawer(
           user_id: widget.user_id,
@@ -155,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   size: hauteur(context, 25),
                                 ),
                                 Text(
-                                    "$allProducts",
+                                    allProducts,
                                   style: TextStyle(
                                     color: primaryColor,
                                     fontSize: hauteur(context, 20)
@@ -190,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     size: hauteur(context, 25),
                                   ),
                                   Text(
-                                    "$allSumProductPrice",
+                                    allSumProductPrice,
                                     style: TextStyle(
                                         color: primaryColor,
                                         fontSize: hauteur(context, 18)
@@ -213,9 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   crossAxisCount: 2,
-                  children: const <Widget>[
-                    HomeProductItem(product_name: "Burger quizz", inBox: "231", outBox: "11",),
-                  ],
+                  children: productList,
                 )
             ),
           ],

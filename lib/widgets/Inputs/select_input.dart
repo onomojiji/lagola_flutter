@@ -39,7 +39,7 @@ class _SelectInputState extends State<SelectInput> {
                   value: widget.defaultvalue,
                   focusColor: Colors.white,
                   isExpanded: true,
-                  underline: SizedBox(),
+                  underline: const SizedBox(),
                   onChanged: (String? value) {
                     setState(() {
                       widget.defaultvalue = value!;

@@ -53,7 +53,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     return Scaffold(
       backgroundColor: whiteColor,
       body: Center(
-          child: Container(
+          child: SizedBox(
             height: screenHeight(context)/2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

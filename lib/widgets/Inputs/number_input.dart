@@ -11,7 +11,7 @@ class NumberInput extends StatelessWidget {
   final IconData? icon;
   final TextEditingController controller;
 
-  NumberInput({super.key, required this.hint, this.icon, required this.controller, required this.focus});
+  const NumberInput({super.key, required this.hint, this.icon, required this.controller, required this.focus});
 
   @override
   Widget build(BuildContext context) {

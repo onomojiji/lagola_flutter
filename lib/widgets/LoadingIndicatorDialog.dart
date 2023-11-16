@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lagola_flutter/configs/colors.dart';
 import 'package:lagola_flutter/configs/screen.dart';
 
@@ -44,7 +43,7 @@ class LoadingIndicatorDialog {
                         ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: largeur(context, 16), vertical: hauteur(context, 16)),
-                        child: Text(text, style: TextStyle(color: Colors.white),),
+                        child: Text(text, style: const TextStyle(color: Colors.white),),
                       ),
                     ],
                   ),
