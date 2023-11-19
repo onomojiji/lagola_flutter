@@ -5,10 +5,10 @@ import '../../configs/screen.dart';
 
 class HistoryItem extends StatelessWidget {
 
-  final String product_name, imgUrl;
+  final String product_name, imgUrl, date;
   final int qte, type;
 
-  const HistoryItem({super.key, required this.product_name, required this.imgUrl, required this.qte, required this.type});
+  const HistoryItem({super.key, required this.product_name, required this.imgUrl, required this.qte, required this.type, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class HistoryItem extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(right: largeur(context, 5)),
-          child: Text("28/08/2023 12:32:44", style: TextStyle(color: textGreyColor, fontSize: hauteur(context, 11)),),
+          child: Text(date, style: TextStyle(color: textGreyColor, fontSize: hauteur(context, 11)),),
         )
       ],
     );

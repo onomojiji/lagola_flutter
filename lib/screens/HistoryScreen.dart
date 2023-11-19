@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:lagola_flutter/widgets/Items/history_item.dart';
 
 import '../configs/colors.dart';
 import '../configs/screen.dart';
+import '../services/dio.dart';
+import '../widgets/LoadingIndicatorDialog.dart';
 import '../widgets/drawer.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -16,6 +19,67 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+
+  late String today = "";
+  late List<Widget> History = <Widget>[];
+
+  getHistory() async {
+
+    // open loading dialog
+    LoadingIndicatorDialog().show(context);
+
+    try{
+      var responseUser = await dio().get(
+        '/gethistory',
+        options: Options(
+          headers: {'Authorization' : 'Bearer ${widget.user_token}',},
+          responseType: ResponseType.json,
+          validateStatus: (statusCode) {
+            if(statusCode == null){
+              return false;
+            }if(statusCode == 404){
+              return true;
+            }else{
+              return statusCode >= 200 && statusCode < 300;
+            }
+          },
+        ),
+      );
+
+      var response = responseUser.data;
+      
+      print(response);
+
+      setState(() {
+        today = response["today"];
+
+        for (var i = 0; i< response["commandes"].length; i++){
+          History.add(
+            HistoryItem(
+              product_name: response["commandes"][i]["name"],
+              imgUrl: "assets/images/burger.png",
+              qte: response["commandes"][i]["quantity"],
+              type: 1,
+              date: response["commandes"][i]["date"],
+            ),
+          );
+        }
+
+      });
+
+      // close loading dialog
+      LoadingIndicatorDialog().dismiss();
+
+    }catch (e){
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {getHistory();});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +114,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             flex: 1,
             child: Center(
               child: Text(
-                "Aujourd'hui 28/08/2023",
+                "Aujourd'hui $today",
                 style: TextStyle(
                   color: textBoldColor,
                   fontWeight: FontWeight.bold,
@@ -66,13 +130,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             flex: 9,
             child: ListView(
               scrollDirection: Axis.vertical,
-              children: const [
-                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 23, type: 1),
-                HistoryItem(product_name: "Chignong blanc de Bakassi", imgUrl: "assets/images/burger.png", qte: 543, type: 0),
-                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 93, type: 0),
-                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 13, type: 1),
-                HistoryItem(product_name: "Burger accompagné des mitoumbas de Yabassi", imgUrl: "assets/images/burger.png", qte: 34, type: 1)
-              ],
+              children: History,
             ),
           ),
         ],
